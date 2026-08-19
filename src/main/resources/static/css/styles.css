@@ -1,0 +1,162 @@
+:root {
+    --sun-yellow: #ffd54f;
+    --sun-gold: #ffc107;
+    --sun-deep: #f6a800;
+    --sun-light: #fff8d6;
+    --sun-cream: #fffdf3;
+    --sun-brown: #4a3500;
+}
+
+body {
+    background: linear-gradient(
+        180deg,
+        #fffdf3 0%,
+        #fff8d6 45%,
+        #fff3b0 100%
+    );
+
+    color: var(--sun-brown);
+    min-height: 100vh;
+}
+
+.navbar-sun {
+    background: linear-gradient(
+        90deg,
+        #ffc107,
+        #ffd54f,
+        #ffe082
+    );
+
+    box-shadow: 0 3px 12px rgba(128, 90, 0, 0.15);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    color: #493300 !important;
+}
+
+.nav-link {
+    color: #493300 !important;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: #000 !important;
+}
+
+.hero-section {
+    padding: 80px 20px;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(255, 213, 79, 0.9),
+            rgba(255, 248, 214, 0.5)
+        );
+
+    border-radius: 0 0 45px 45px;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+}
+
+.sun-icon {
+    font-size: 5rem;
+    animation: glow 2.5s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        transform: scale(1);
+        filter: drop-shadow(0 0 8px #ffc107);
+    }
+
+    to {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 25px #ffca28);
+    }
+}
+
+.btn-sun {
+    background: var(--sun-gold);
+    color: #3c2b00;
+    border: 2px solid #e6a900;
+    font-weight: 700;
+}
+
+.btn-sun:hover {
+    background: #ffb300;
+    color: #241900;
+}
+
+.card-sun {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid #ffe082;
+    border-radius: 20px;
+    box-shadow: 0 5px 18px rgba(150, 110, 0, 0.12);
+    transition: 0.2s ease;
+}
+
+.card-sun:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(150, 110, 0, 0.18);
+}
+
+.section-title {
+    font-weight: 800;
+    color: #5a4000;
+}
+
+.sun-placeholder {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 5rem;
+
+    background: linear-gradient(
+        135deg,
+        #fff8d6,
+        #ffd54f
+    );
+
+    border-radius: 18px 18px 0 0;
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 18px 18px 0 0;
+}
+
+.form-sun {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #ffe082;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(128, 90, 0, 0.12);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.2);
+}
+
+.badge-sun {
+    background: #fff0a8;
+    color: #493300;
+}
+
+footer {
+    margin-top: 60px;
+    padding: 25px;
+    background: #ffd54f;
+    color: #493300;
+    text-align: center;
+    font-weight: 600;
+}
