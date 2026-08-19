@@ -19,42 +19,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-sun">
-
-    <div class="container">
-
-        <a class="navbar-brand" th:href="@{/}">
-            ☀️ Reaching the Little Sun
-        </a>
-
-        <div class="navbar-nav ms-auto">
-
-            <a class="nav-link" th:href="@{/}">
-                Home
-            </a>
-
-            <a class="nav-link" th:href="@{/products}">
-                Products
-            </a>
-
-            <a class="nav-link" th:href="@{/products/new}">
-                Add Product
-            </a>
-
-            <a class="nav-link" th:href="@{/artists}">
-                Artists
-            </a>
-
-            <a class="nav-link" th:href="@{/about}">
-                About
-            </a>
-
-        </div>
-
-    </div>
-
-</nav>
-
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <main class="container py-5">
 
