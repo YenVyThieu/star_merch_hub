@@ -4,14 +4,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import Group.com.starmerch.Artifact.star_merch_hub.model.ArtistName;
@@ -26,107 +29,340 @@ public class ProductController {
 
     private final ProductRepository productRepository;
 
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(
+            ProductRepository productRepository) {
+
         this.productRepository = productRepository;
     }
 
+
     @GetMapping
     public String listProducts(
-            @RequestParam(required = false) ArtistName artist,
-            @RequestParam(required = false) CategoryType category,
-            @RequestParam(defaultValue = "nameAsc") String sort,
-            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(required = false)
+            ArtistName artist,
+
+            @RequestParam(required = false)
+            CategoryType category,
+
+            @RequestParam(defaultValue = "nameAsc")
+            String sort,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
             Model model) {
+
 
         Sort sorting;
 
         switch (sort) {
+
             case "nameDesc":
-                sorting = Sort.by("name").descending();
+                sorting =
+                    Sort.by("name").descending();
                 break;
 
             case "priceAsc":
-                sorting = Sort.by("price").ascending();
+                sorting =
+                    Sort.by("price").ascending();
                 break;
 
             case "priceDesc":
-                sorting = Sort.by("price").descending();
+                sorting =
+                    Sort.by("price").descending();
                 break;
 
             case "createdDesc":
-                sorting = Sort.by("createdAt").descending();
+                sorting =
+                    Sort.by("createdAt").descending();
                 break;
 
             default:
-                sorting = Sort.by("name").ascending();
+                sorting =
+                    Sort.by("name").ascending();
         }
 
-        Pageable pageable = PageRequest.of(page, 6, sorting);
+
+        Pageable pageable =
+            PageRequest.of(
+                page,
+                6,
+                sorting
+            );
+
 
         Page<Product> productPage;
 
-        if (artist != null && category != null) {
-            productPage = productRepository.findByArtistAndCategory(
-                    artist,
-                    category,
-                    pageable
-            );
+
+        if (artist != null
+                && category != null) {
+
+            productPage =
+                productRepository
+                    .findByArtistAndCategory(
+                        artist,
+                        category,
+                        pageable
+                    );
+
         } else if (artist != null) {
-            productPage = productRepository.findByArtist(
-                    artist,
-                    pageable
-            );
+
+            productPage =
+                productRepository
+                    .findByArtist(
+                        artist,
+                        pageable
+                    );
+
         } else if (category != null) {
-            productPage = productRepository.findByCategory(
-                    category,
-                    pageable
-            );
+
+            productPage =
+                productRepository
+                    .findByCategory(
+                        category,
+                        pageable
+                    );
+
         } else {
-            productPage = productRepository.findAll(pageable);
+
+            productPage =
+                productRepository
+                    .findAll(pageable);
         }
 
-        model.addAttribute("productPage", productPage);
-        model.addAttribute("artists", ArtistName.values());
-        model.addAttribute("categories", CategoryType.values());
-        model.addAttribute("selectedArtist", artist);
-        model.addAttribute("selectedCategory", category);
-        model.addAttribute("sort", sort);
+
+        model.addAttribute(
+            "productPage",
+            productPage
+        );
+
+        model.addAttribute(
+            "artists",
+            ArtistName.values()
+        );
+
+        model.addAttribute(
+            "categories",
+            CategoryType.values()
+        );
+
+        model.addAttribute(
+            "selectedArtist",
+            artist
+        );
+
+        model.addAttribute(
+            "selectedCategory",
+            category
+        );
+
+        model.addAttribute(
+            "sort",
+            sort
+        );
+
 
         return "products";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
 
-        model.addAttribute("product", new Product());
-        model.addAttribute("artists", ArtistName.values());
-        model.addAttribute("categories", CategoryType.values());
+    @GetMapping("/new")
+    public String showCreateForm(
+            Model model) {
+
+        model.addAttribute(
+            "product",
+            new Product()
+        );
+
+        addFormOptions(model);
 
         return "product-form";
     }
 
+
     @PostMapping
     public String createProduct(
-            @Valid @ModelAttribute("product") Product product,
+
+            @Valid
+            @ModelAttribute("product")
+            Product product,
+
             BindingResult result,
+
             Model model,
+
             RedirectAttributes redirectAttributes) {
+
 
         if (result.hasErrors()) {
 
-            model.addAttribute("artists", ArtistName.values());
-            model.addAttribute("categories", CategoryType.values());
+            addFormOptions(model);
 
             return "product-form";
         }
 
+
         productRepository.save(product);
 
-        redirectAttributes.addFlashAttribute(
+
+        redirectAttributes
+            .addFlashAttribute(
                 "successMessage",
                 "Your little sun has been added successfully! ☀️"
-        );
+            );
+
 
         return "redirect:/products";
+    }
+
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(
+
+            @PathVariable Long id,
+
+            Model model) {
+
+
+        Product product =
+            findProduct(id);
+
+
+        model.addAttribute(
+            "product",
+            product
+        );
+
+        addFormOptions(model);
+
+
+        return "product-edit";
+    }
+
+
+    @PostMapping("/{id}/edit")
+    public String updateProduct(
+
+            @PathVariable Long id,
+
+            @Valid
+            @ModelAttribute("product")
+            Product formProduct,
+
+            BindingResult result,
+
+            Model model,
+
+            RedirectAttributes redirectAttributes) {
+
+
+        if (result.hasErrors()) {
+
+            addFormOptions(model);
+
+            return "product-edit";
+        }
+
+
+        Product existing =
+            findProduct(id);
+
+
+        existing.setName(
+            formProduct.getName()
+        );
+
+        existing.setDescription(
+            formProduct.getDescription()
+        );
+
+        existing.setPrice(
+            formProduct.getPrice()
+        );
+
+        existing.setStockKeepingUnit(
+            formProduct.getStockKeepingUnit()
+        );
+
+        existing.setImageUrl(
+            formProduct.getImageUrl()
+        );
+
+        existing.setArtist(
+            formProduct.getArtist()
+        );
+
+        existing.setCategory(
+            formProduct.getCategory()
+        );
+
+
+        productRepository.save(existing);
+
+
+        redirectAttributes
+            .addFlashAttribute(
+                "successMessage",
+                "Product updated successfully! ☀️"
+            );
+
+
+        return "redirect:/products";
+    }
+
+
+    @PostMapping("/{id}/delete")
+    public String deleteProduct(
+
+            @PathVariable Long id,
+
+            RedirectAttributes redirectAttributes) {
+
+
+        Product product =
+            findProduct(id);
+
+
+        productRepository.delete(product);
+
+
+        redirectAttributes
+            .addFlashAttribute(
+                "successMessage",
+                "Product deleted successfully."
+            );
+
+
+        return "redirect:/admin";
+    }
+
+
+    private Product findProduct(Long id) {
+
+        return productRepository
+            .findById(id)
+            .orElseThrow(() ->
+                new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Product not found."
+                )
+            );
+    }
+
+
+    private void addFormOptions(
+            Model model) {
+
+        model.addAttribute(
+            "artists",
+            ArtistName.values()
+        );
+
+        model.addAttribute(
+            "categories",
+            CategoryType.values()
+        );
     }
 }
