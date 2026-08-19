@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/star_merch_hub}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  sql:
+    init:
+      mode: never
+
+  h2:
+    console:
+      enabled: false

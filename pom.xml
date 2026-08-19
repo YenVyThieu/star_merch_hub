@@ -75,13 +75,19 @@
         </dependency>
 
 
-        <!-- H2 DATABASE -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+        <!-- H2 FOR DEV -->
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <scope>runtime</scope>
+    </dependency>
 
+    <!-- MYSQL FOR PROD -->
+    <dependency>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <scope>runtime</scope>
+    </dependency>
 
         <!-- H2 WEB CONSOLE FOR SPRING BOOT 4 -->
         <dependency>

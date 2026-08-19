@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: star_merch_hub
+
+  profiles:
+    default: dev
+
+  thymeleaf:
+    cache: false
+
+server:
+  port: 8080
